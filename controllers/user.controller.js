@@ -43,7 +43,7 @@ const login = async (req, res) => {
         return res.status(400).json({msg: "Please enter all the fields"});
     }
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ username: username.toString().trim() });
         if (user && bcrypt.compareSync(password, user.password)) {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
                 expiresIn: 86400
