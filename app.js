@@ -8,6 +8,6 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', userRouter);
+app.use("/api", userRouter);
 
 module.exports = app;
