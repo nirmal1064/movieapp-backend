@@ -9,7 +9,7 @@ const register = (req, res) => {
     } else if (password.length < 6) {
         res.status(400).json({msg: "Password should be atleast 6 characters"});
     } else {
-        User.findOne({username}, (err, user) => {
+        User.findOne({username: username.toString().trim()}, (err, user) => {
             if (err) res.status(500).send({ msg: "Some error occured" });
             else if(user) res.status(409).json({msg: "Existing User. Please login"});
             else {
