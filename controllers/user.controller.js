@@ -55,7 +55,7 @@ const login = async (req, res) => {
                 token: token
             });
         } else {
-            res.status(400).json({msg: "Username or Password wrong"});
+            res.status(401).json({msg: "Username or Password wrong"});
         }
     } catch (err) {
         console.log(err);
