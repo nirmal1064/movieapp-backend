@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { name, username, password } = req.body;
+  if (!username || !password || !name) {
     return res.status(400).json({ msg: "Please enter all the fields" });
   }
   if (password.length < 6) {
@@ -21,6 +21,7 @@ const register = async (req, res) => {
     }
     const hashedPassword = bcrypt.hashSync(password, 8);
     const newUser = new User({
+      name,
       username,
       password: hashedPassword
     });
@@ -31,6 +32,7 @@ const register = async (req, res) => {
     });
     res.status(201).json({
       id: user._id,
+      name: user.name,
       username: user.username,
       auth: true,
       token: token
@@ -54,6 +56,7 @@ const login = async (req, res) => {
       });
       res.status(200).json({
         id: user._id,
+        name: user.name,
         username: user.username,
         auth: true,
         token: token

@@ -12,6 +12,7 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "axios": "^0.21.2",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
