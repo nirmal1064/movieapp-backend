@@ -14,7 +14,7 @@ router.post("/watched/add", verifyToken, addMovieToWatched);
 router.post("/watchlist/add", verifyToken, addMovieToWatchList);
 router.post("/watched/remove", verifyToken, removeMovieFromWatched);
 router.post("/watchlist/remove", verifyToken, removeMovieFromWatchList);
-router.get("/watched", verifyToken, getWatchedMovies);
-router.get("/watchlist", verifyToken, getWatchListMovies);
+router.get("/watched/:id", verifyToken, getWatchedMovies);
+router.get("/watchlist/:id", verifyToken, getWatchListMovies);
 
 module.exports = router;

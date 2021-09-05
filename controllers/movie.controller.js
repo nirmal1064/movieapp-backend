@@ -109,7 +109,7 @@ const removeMovieFromWatchList = async (req, res) => {
 };
 
 const getWatchedMovies = async (req, res) => {
-  const { userId } = req.body;
+  const userId = req.params.id;
   try {
     const user = await Watched.findOne({ userId });
     if (user) {
@@ -127,7 +127,7 @@ const getWatchedMovies = async (req, res) => {
 };
 
 const getWatchListMovies = async (req, res) => {
-  const { userId } = req.body;
+  const userId = req.params.id;
   try {
     const user = await WatchList.findOne({ userId });
     if (user) {
