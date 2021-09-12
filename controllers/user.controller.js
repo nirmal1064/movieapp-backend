@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const logger = require("../config/logger");
 
 const register = async (req, res) => {
   const { name, username, password } = req.body;
@@ -45,6 +46,11 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { username, password } = req.body;
+  logger.info(
+    "Request for login route with username %s and password %s",
+    username,
+    password
+  );
   if (!username || !password) {
     return res.status(400).json({ msg: "Please enter all the fields" });
   }
@@ -71,6 +77,7 @@ const login = async (req, res) => {
 };
 
 const home = (req, res) => {
+  logger.info("Home route requested by %s", req.userId);
   res.status(200).json({ msg: "Welcome Home" });
 };
 

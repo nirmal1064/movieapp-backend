@@ -118,7 +118,7 @@ const getWatchedMovies = async (req, res) => {
       );
       res.status(200).json(watchedMovies);
     } else {
-      res.status(200).json({ msg: "Something wrong" });
+      res.status(200).json({ movies: [] });
     }
   } catch (error) {
     console.log(error);
@@ -136,7 +136,7 @@ const getWatchListMovies = async (req, res) => {
       );
       res.status(200).json(watchedMovies);
     } else {
-      res.status(200).json({ msg: "Something wrong" });
+      res.status(200).json({ movies: [] });
     }
   } catch (error) {
     console.log(error);
