@@ -6,6 +6,9 @@ const WatchList = require("../models/watch.model").watchList;
 const addMovie = async (movieId) => {
   const url = `http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&i=${movieId}`;
   const data = await (await axios.get(url)).data;
+  if (data.Response === "False") {
+    throw new Error("Movie Not found");
+  }
   const movie = await Movie.create({ _id: data.imdbID, ...data });
   return movie;
 };
@@ -15,27 +18,23 @@ const addMovieToWatched = async (req, res) => {
   let { movieId } = req.body;
   try {
     const user = await Watched.findOne({ userId });
-    const movieFound = await Movie.findOne({ _id: movieId });
+    let movieFound = await Movie.findOne({ _id: movieId });
     if (!movieFound) {
-      const movie = await addMovie(movieId);
-      movieId = movie._id;
+      movieFound = await addMovie(movieId);
     }
     if (user) {
       // add movie to the desired collection
-      if (!user.movies.includes(movieId)) {
-        user.movies.push(movieId);
-        const updateWatch = await user.save();
-        res.status(201).json(updateWatch);
+      if (!user.movies.includes(movieFound._id)) {
+        user.movies.push(movieFound._id);
+        await user.save();
+        res.status(201).json(movieFound);
       } else {
         res.status(200).json({ msg: "Movie already in collection" });
       }
     } else {
       // create a watched user and add movie to the collection
-      const newWatchedDoc = await Watched.create({
-        userId,
-        movies: [movieId]
-      });
-      res.status(201).json(newWatchedDoc);
+      await Watched.create({ userId, movies: [movieFound._id] });
+      res.status(201).json(movieFound);
     }
   } catch (error) {
     console.log(error);
@@ -48,27 +47,24 @@ const addMovieToWatchList = async (req, res) => {
   let { movieId } = req.body;
   try {
     const user = await WatchList.findOne({ userId });
-    const movieFound = await Movie.findOne({ _id: movieId });
+    let movieFound = await Movie.findOne({ _id: movieId });
     if (!movieFound) {
-      const movie = await addMovie(movieId);
-      movieId = movie._id;
+      movieFound = await addMovie(movieId);
+      movieId = movieFound._id;
     }
     if (user) {
       // add movie to the desired collection
-      if (!user.movies.includes(movieId)) {
-        user.movies.push(movieId);
-        const updateWatch = await user.save();
-        res.status(201).json(updateWatch);
+      if (!user.movies.includes(movieFound._id)) {
+        user.movies.push(movieFound._id);
+        await user.save();
+        res.status(201).json(movieFound);
       } else {
         res.status(200).json({ msg: "Movie already in collection" });
       }
     } else {
       // create a watchlist user and add movie to the collection
-      const newWatchedDoc = await WatchList.create({
-        userId,
-        movies: [movieId]
-      });
-      res.status(201).json(newWatchedDoc);
+      await WatchList.create({ userId, movies: [movieFound._id] });
+      res.status(201).json(movieFound);
     }
   } catch (error) {
     console.log(error);
