@@ -15,7 +15,7 @@ const addMovie = async (movieId) => {
 
 const searchMovies = async (req, res) => {
   try {
-    const searchValue = req.body.search;
+    const searchValue = req.query.s;
     const omdburl = `http://www.omdbapi.com/?s=${searchValue}&apikey=${process.env.OMDB_API_KEY}`;
     const data = await (await axios.get(omdburl)).data;
     if (data.Response === "False") {

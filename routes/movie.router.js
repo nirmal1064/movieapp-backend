@@ -17,6 +17,6 @@ router.post("/watched/remove", verifyToken, removeMovieFromWatched);
 router.post("/watchlist/remove", verifyToken, removeMovieFromWatchList);
 router.get("/watched/:id", verifyToken, getWatchedMovies);
 router.get("/watchlist/:id", verifyToken, getWatchListMovies);
-router.get("/search", searchMovies);
+router.get("/search", verifyToken, searchMovies);
 
 module.exports = router;
