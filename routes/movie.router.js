@@ -4,7 +4,8 @@ const {
   getWatchedMovies,
   getWatchListMovies,
   removeMovieFromWatched,
-  removeMovieFromWatchList
+  removeMovieFromWatchList,
+  searchMovies
 } = require("../controllers/movie.controller");
 const { verifyToken } = require("../middlewares/auth");
 
@@ -16,5 +17,6 @@ router.post("/watched/remove", verifyToken, removeMovieFromWatched);
 router.post("/watchlist/remove", verifyToken, removeMovieFromWatchList);
 router.get("/watched/:id", verifyToken, getWatchedMovies);
 router.get("/watchlist/:id", verifyToken, getWatchListMovies);
+router.get("/search", searchMovies);
 
 module.exports = router;

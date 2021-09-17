@@ -13,8 +13,23 @@ const addMovie = async (movieId) => {
   return movie;
 };
 
+const searchMovies = async (req, res) => {
+  try {
+    const searchValue = req.body.search;
+    const omdburl = `http://www.omdbapi.com/?s=${searchValue}&apikey=${process.env.OMDB_API_KEY}`;
+    const data = await (await axios.get(omdburl)).data;
+    if (data.Response === "False") {
+      return res.status(200).json([]);
+    }
+    res.status(200).json(data.Search);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error);
+  }
+};
+
 const addMovieToWatched = async (req, res) => {
-  const userId = req.body._id;
+  const { userId } = req.body;
   let { movieId } = req.body;
   try {
     const user = await Watched.findOne({ userId });
@@ -43,7 +58,7 @@ const addMovieToWatched = async (req, res) => {
 };
 
 const addMovieToWatchList = async (req, res) => {
-  const userId = req.body._id;
+  const { userId } = req.body;
   let { movieId } = req.body;
   try {
     const user = await WatchList.findOne({ userId });
@@ -76,12 +91,12 @@ const removeMovieFromWatched = async (req, res) => {
   const { userId, movieId } = req.body;
   try {
     const user = await Watched.findOne({ userId });
-    const movieIndex = user.movies.findIndex(movieId);
+    const movieIndex = user.movies.indexOf(movieId);
     if (movieIndex > -1) {
       user.movies.splice(movieIndex, 1);
     }
-    const updateWatch = await user.save();
-    res.status(201).json(updateWatch);
+    await user.save();
+    res.status(201).json(movieId);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: error.message });
@@ -92,12 +107,12 @@ const removeMovieFromWatchList = async (req, res) => {
   const { userId, movieId } = req.body;
   try {
     const user = await WatchList.findOne({ userId });
-    const movieIndex = user.movies.findIndex(movieId);
+    const movieIndex = user.movies.indexOf(movieId);
     if (movieIndex > -1) {
       user.movies.splice(movieIndex, 1);
     }
-    const updateWatch = await user.save();
-    res.status(201).json(updateWatch);
+    await user.save();
+    res.status(201).json(movieId);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: error.message });
@@ -146,5 +161,6 @@ module.exports = {
   removeMovieFromWatched,
   removeMovieFromWatchList,
   getWatchedMovies,
-  getWatchListMovies
+  getWatchListMovies,
+  searchMovies
 };
