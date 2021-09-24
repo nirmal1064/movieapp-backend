@@ -16,12 +16,13 @@ const addMovie = async (movieId) => {
 const searchMovies = async (req, res) => {
   try {
     const searchValue = req.query.s;
-    const omdburl = `http://www.omdbapi.com/?s=${searchValue}&apikey=${process.env.OMDB_API_KEY}`;
+    const pageNumber = req.query.p || 1;
+    const omdburl = `http://www.omdbapi.com/?s=${searchValue}&page=${pageNumber}&apikey=${process.env.OMDB_API_KEY}`;
     const data = await (await axios.get(omdburl)).data;
     if (data.Response === "False") {
-      return res.status(200).json([]);
+      return res.status(200).json({});
     }
-    res.status(200).json(data.Search);
+    res.status(200).json(data);
   } catch (error) {
     console.log(error.message);
     res.status(500).json(error);
