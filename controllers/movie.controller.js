@@ -66,7 +66,6 @@ const addMovieToWatchList = async (req, res) => {
     let movieFound = await Movie.findOne({ _id: movieId });
     if (!movieFound) {
       movieFound = await addMovie(movieId);
-      movieId = movieFound._id;
     }
     if (user) {
       // add movie to the desired collection
