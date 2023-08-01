@@ -20,7 +20,7 @@
     "helmet": "^4.6.0",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^6.11.2",
-    "winston": "^3.8.2"
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
